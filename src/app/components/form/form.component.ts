@@ -33,6 +33,7 @@ export class FormComponent implements OnInit {
       case 'city': return 'ciudad';
       case 'province': return 'provincia';
       case 'country': return 'país';
+      case 'conditions': return 'condiciones';
       default: return fieldName;
     }
   }
@@ -52,7 +53,7 @@ export class FormComponent implements OnInit {
       min: `El campo ${this.translateFieldName(fieldName)} debe valer como mínimo ${error?.min?.min}`,
       max: `El campo ${this.translateFieldName(fieldName)} debe valer como máximo ${error?.max?.max}`,
       pattern: `El campo ${this.translateFieldName(fieldName)} es incorrecto`,
-      dni: `El campo ${this.translateFieldName(fieldName)} es incorrecto`
+      dni: `El ${this.translateFieldName(fieldName)} no es válido`
     }
     return ERROR_MESSAGE[errorName]
   }
@@ -67,7 +68,7 @@ export class FormComponent implements OnInit {
   displayFieldCss(field: string): any {
     return {
       'has-error': this.isFieldTouched(field) && !this.isFieldValid(field),
-      'has-feedback': this.isFieldTouched(field) && this.isFieldValid(field)
+      'has-success': this.isFieldTouched(field) && this.isFieldValid(field)
     };
   }
 
@@ -108,13 +109,15 @@ export class FormComponent implements OnInit {
         address: this.formBuilder.group(
           {
             street: ['',[Validators.required]],
-            street2: [''],
+            via: ['', [Validators.required]],
             zipCode: ['', [Validators.required]],
             city: ['', [Validators.required]],
             province: ['', [Validators.required]],
             country: ['', [Validators.required]],
           }
-        )
+        ),
+        conditions: [false, [Validators.requiredTrue]],
+        ads: [false]
       }
     );
   }
